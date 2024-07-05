@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class CharacterSelectionPopup : MonoBehaviour
+public class CharacterSelectionPopupView : MonoBehaviour
 {
     [SerializeField] private CharacterView _characterView;
 
     private ICharacterSelectionPopupPresenter _presenter;
 
-    public void Show(ICharacterSelectionPopupPresenter presenter)
+    public void Initialize(ICharacterSelectionPopupPresenter presenter)
     {
         _presenter = presenter;
         _presenter.CurrentCharacterChanged += RefreshState;

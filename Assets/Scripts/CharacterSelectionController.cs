@@ -1,36 +1,33 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using DefaultNamespace;
+using UnityEngine;
 
-public class CharacterSelectionController : MonoBehaviour
+public class CharacterSelectionController : IDisposable
 {
-    [SerializeField] private Button _leftArrow;
-    [SerializeField] private Button _rightArrow;
-    [SerializeField] private Button _selectButton;
-    [SerializeField] private CharacterSelectionPopup _selectionPopup;
-    [SerializeField] private CharacterListModel _charactersModel;
+    private CharacterSelectionView characterSelectionView;
+    private CharacterListModel _charactersModel;
+
+    public CharacterSelectionController(
+        CharacterSelectionView characterSelectionView,
+        CharacterListModel charactersModel)
+    {
+        this.characterSelectionView = characterSelectionView;
+        _charactersModel = charactersModel;
+        OnEnable();
+    }
 
     private void OnEnable()
     {
-        _leftArrow.onClick.AddListener(OnLeftArrowClicked);
-        _rightArrow.onClick.AddListener(OnRightArrowClicked);
-        _selectButton.onClick.AddListener(OnCharacterSelected);
+        characterSelectionView.LeftArrowClick.AddListener(OnLeftArrowClicked);
+        characterSelectionView.RightArrowClick.AddListener(OnRightArrowClicked);
+        characterSelectionView.SelectButtonClick.AddListener(OnCharacterSelected);
     }
 
-    private void OnDisable()
+    public void Dispose()
     {
-        _leftArrow.onClick.RemoveListener(OnLeftArrowClicked);
-        _rightArrow.onClick.RemoveListener(OnRightArrowClicked);
-        _selectButton.onClick.RemoveListener(OnCharacterSelected);
-    }
-
-    private void Start()
-    {
-        ShowSelectionPopup();
-    }
-
-    public void ShowSelectionPopup()
-    {
-        _selectionPopup.Show(new CharacterSelectionPopupPresenter(_charactersModel));
+        characterSelectionView.LeftArrowClick.RemoveListener(OnLeftArrowClicked);
+        characterSelectionView.RightArrowClick.RemoveListener(OnRightArrowClicked);
+        characterSelectionView.SelectButtonClick.RemoveListener(OnCharacterSelected);
     }
 
     private void OnLeftArrowClicked()
